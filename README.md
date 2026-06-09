@@ -1,4 +1,4 @@
-# Kubernetes Skill for Claude Code and Codex: KubeShark
+# Kubernetes Skill for Claude Code, Codex & Antigravity: KubeShark
 
 <div align="center" name="top">
   <img align="center" src="assets/logo.png" width="180" height="180" alt="KubeShark Logo">
@@ -8,18 +8,19 @@
 
 [![Claude Skill](https://img.shields.io/badge/Claude-Skill-6272F5)](https://docs.claude.ai/docs/agent-skills)
 [![Codex Skill](https://img.shields.io/badge/Codex-Skill-10A37F)](https://developers.openai.com/codex/skills/)
+[![Antigravity Skill](https://img.shields.io/badge/Antigravity-Skill-4285F4)](https://github.com/google/antigravity)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 [![GitHub stars](https://img.shields.io/github/stars/LukasNiessen/kubernetes-skill.svg)](https://github.com/LukasNiessen/kubernetes-skill)
 
 </div>
 
-The #1 Kubernetes skill for Claude Code and Codex, measured by GitHub stars.
+The #1 Kubernetes skill for Claude Code, Codex, and Antigravity, measured by GitHub stars.
 
 ### Fixes Hallucinations.
 
 LLMs hallucinate a lot when it comes to Kubernetes. They omit security contexts, generate deprecated APIs, use wildcard RBAC, forget resource limits, and produce probes that cause cascading failures. This skill fixes it. It includes best practices for Kubernetes -- good, bad, and neutral examples so the AI avoids common mistakes. Using KubeShark, the AI keeps proven practices in mind, eliminates hallucinations, and defaults to secure, reliable, production-ready manifests.
 
-KubeShark is built as the production-grade Kubernetes skill for Claude Code and Codex: broader than resource-template skills, safer than generic Kubernetes prompts, and tuned for hallucination prevention instead of raw tutorial volume.
+KubeShark is built as the production-grade Kubernetes skill for Claude Code, Codex, and Antigravity: broader than resource-template skills, safer than generic Kubernetes prompts, and tuned for hallucination prevention instead of raw tutorial volume.
 
 ### Very Token-Efficient.
 
@@ -88,9 +89,35 @@ When working with Kubernetes manifests, Helm charts, or Kustomize overlays, foll
 Load references from `.kubernetes-skill/references/` as needed.
 ```
 
+### Option 4: Antigravity IDE
+
+Antigravity IDE supports KubeShark as a native plugin or via the SDK.
+
+**IDE Plugin (recommended):**
+
+```bash
+git clone https://github.com/LukasNiessen/kubernetes-skill.git ~/.gemini/config/plugins/kubeshark
+```
+
+**SDK Programmatic:**
+
+```python
+from google.antigravity import Agent, LocalAgentConfig
+
+config = LocalAgentConfig(
+    skills_paths=["/path/to/kubernetes-skill"],
+)
+
+async with Agent(config) as agent:
+    response = await agent.chat("Create a production Deployment for Kubernetes 1.30")
+    print(await response.text())
+```
+
+See the full [Antigravity Setup Guide](docs/getting-started/antigravity-setup.md) for CLI usage, API key setup, and advanced SDK patterns.
+
 ### That's it!
 
-Done. Now ask Claude Code / Codex any Kubernetes question. KubeShark responses follow the 7-step failure-mode workflow and include an output contract with assumptions, tradeoffs, and rollback notes.
+Done. Now ask Claude Code / Codex / Antigravity any Kubernetes question. KubeShark responses follow the 7-step failure-mode workflow and include an output contract with assumptions, tradeoffs, and rollback notes.
 
 **Invoke explicitly:**
 
@@ -244,7 +271,9 @@ Here is an overview of the repository layout.
 | `references/do-dont-patterns.md`                 | Do/Don't quick-reference checklist                             |
 | `.github/workflows/validate.yml`                 | CI validation for skill structure and links                    |
 | `.github/PULL_REQUEST_TEMPLATE.md`               | PR quality and failure-mode checklist                          |
-| `.claude-plugin/marketplace.json`                | Plugin metadata                                                |
+| `.claude-plugin/marketplace.json`                | Claude Code plugin metadata                                    |
+| `.antigravity-plugin/plugin.json`                | Antigravity IDE plugin metadata                                |
+| `examples/antigravity_agent.py`                  | Standalone Antigravity SDK example script                      |
 
 ## How It Works
 
@@ -281,7 +310,11 @@ No. The skill is designed for low token overhead. Only relevant references are l
 
 **Q: Can I use this outside Claude Code?**
 
-Yes. The references are plain Markdown and can be used from any workflow or AI assistant, **including Codex**. The trigger behavior in `SKILL.md` is optimized for skill-enabled environments.
+Yes. The references are plain Markdown and can be used from any workflow or AI assistant, including **Codex** and **Antigravity IDE**. The trigger behavior in `SKILL.md` is optimized for skill-enabled environments. See the [Antigravity Setup Guide](docs/getting-started/antigravity-setup.md) for detailed instructions.
+
+**Q: How do I use this with the Antigravity SDK?**
+
+Load KubeShark via `skills_paths` in your `LocalAgentConfig`. See [Antigravity SDK Integration](docs/integrations/antigravity-sdk-integration.md) for advanced patterns including MCP integration, safety policies, structured output, and subagent workflows. A runnable example is at [`examples/antigravity_agent.py`](examples/antigravity_agent.py).
 
 **Q: What Kubernetes versions are supported?**
 

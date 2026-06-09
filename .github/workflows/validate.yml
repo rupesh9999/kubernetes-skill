@@ -26,7 +26,7 @@ jobs:
                   errors.append(f'missing required file: {f}')
 
           # --- required directories ---
-          for d in ['references', '.claude-plugin']:
+          for d in ['references', '.claude-plugin', '.antigravity-plugin']:
               if not Path(d).is_dir():
                   errors.append(f'missing required directory: {d}')
 
@@ -65,6 +65,47 @@ jobs:
               sys.exit(1)
           else:
               print('All structural checks passed.')
+          PY
+
+      - name: Validate Antigravity plugin structure
+        run: |
+          python3 - <<'PY'
+          from pathlib import Path
+          import json, sys
+
+          errors = []
+
+          # --- plugin.json ---
+          pj = Path('.antigravity-plugin/plugin.json')
+          if not pj.exists():
+              errors.append('missing .antigravity-plugin/plugin.json')
+          else:
+              try:
+                  data = json.loads(pj.read_text(encoding='utf-8'))
+                  for field in ['name', 'version', 'description']:
+                      if not data.get(field):
+                          errors.append(f'plugin.json missing required field: {field}')
+              except json.JSONDecodeError as e:
+                  errors.append(f'plugin.json is not valid JSON: {e}')
+
+          # --- skill structure ---
+          skill_dir = Path('.antigravity-plugin/skills/kubernetes-skill')
+          if not skill_dir.is_dir():
+              errors.append('missing .antigravity-plugin/skills/kubernetes-skill/')
+          else:
+              skill_md = skill_dir / 'SKILL.md'
+              refs_dir = skill_dir / 'references'
+              if not skill_md.exists():
+                  errors.append('SKILL.md not accessible in Antigravity skill dir')
+              if not refs_dir.exists():
+                  errors.append('references/ not accessible in Antigravity skill dir')
+
+          if errors:
+              for e in errors:
+                  print(f'ERROR: {e}')
+              sys.exit(1)
+          else:
+              print('Antigravity plugin structure valid.')
           PY
 
       - name: Validate local markdown links

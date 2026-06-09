@@ -6,6 +6,7 @@
 
 - [Installation](getting-started/installation.md)
 - [Quick Start](getting-started/quick-start.md)
+- [Antigravity Setup](getting-started/antigravity-setup.md)
 
 ## Core Concepts
 
@@ -35,6 +36,7 @@
 - [Security Hardening](guides/security-hardening.md)
 - [Observability](guides/observability.md)
 - [Validation and Policy](guides/validation-and-policy.md)
+- [Antigravity Usage Guide](guides/antigravity-usage.md)
 
 ## Code Examples
 
@@ -45,6 +47,7 @@
 ## Integrations
 
 - [MCP Integration](integrations/mcp-integration.md)
+- [Antigravity SDK Integration](integrations/antigravity-sdk-integration.md)
 
 ## Advanced
 

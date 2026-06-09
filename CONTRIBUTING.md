@@ -36,9 +36,18 @@ for p in [
   'references/api-drift.md',
 ]:
   assert Path(p).exists(), f'missing {p}'
+assert Path('.antigravity-plugin/plugin.json').exists(), 'missing Antigravity plugin.json'
 print('basic structure OK')
 PY
 ```
+
+## Cross-platform testing
+
+Changes should be verified across all supported platforms:
+
+- **Claude Code**: Skill auto-discovered from `~/.claude/skills/` — verify `SKILL.md` loads correctly
+- **Codex**: Referenced via `AGENTS.md` in the project root — verify the workflow activates
+- **Antigravity IDE**: Plugin installed in `~/.gemini/config/plugins/kubeshark/` or loaded via `skills_paths` — verify the agent discovers the skill and follows the 7-step workflow
 
 ## Content rules
 

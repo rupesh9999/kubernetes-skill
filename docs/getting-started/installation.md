@@ -1,6 +1,6 @@
 # Installation
 
-KubeShark can be installed in three ways depending on your environment: direct clone (recommended), marketplace install, or per-project setup for Codex.
+KubeShark can be installed in four ways depending on your environment: direct clone (recommended for Claude Code), marketplace install, per-project setup for Codex, or Antigravity IDE plugin/SDK.
 
 ---
 
@@ -77,6 +77,48 @@ Codex will follow the workflow whenever it encounters Kubernetes tasks in the pr
 
 ---
 
+## Option 4: Antigravity IDE
+
+Antigravity IDE supports KubeShark as a native plugin or via the Python SDK.
+
+### IDE Plugin Install
+
+Clone KubeShark into the Antigravity plugin directory:
+
+**macOS / Linux:**
+
+```bash
+git clone https://github.com/LukasNiessen/kubernetes-skill.git ~/.gemini/config/plugins/kubeshark
+```
+
+**Windows (PowerShell):**
+
+```powershell
+git clone https://github.com/LukasNiessen/kubernetes-skill.git "$env:USERPROFILE\.gemini\config\plugins\kubeshark"
+```
+
+The IDE reads `.antigravity-plugin/plugin.json` and discovers the skill automatically. No restart needed.
+
+### SDK Programmatic Usage
+
+Load KubeShark directly in Python via `skills_paths`:
+
+```python
+from google.antigravity import Agent, LocalAgentConfig
+
+config = LocalAgentConfig(
+    skills_paths=["/path/to/kubernetes-skill"],
+)
+
+async with Agent(config) as agent:
+    response = await agent.chat("Create a production Deployment for Kubernetes 1.30")
+    print(await response.text())
+```
+
+**Prerequisites:** Python 3.10+, `pip install google-antigravity`, and a `GEMINI_API_KEY` environment variable. See the full [Antigravity Setup Guide](antigravity-setup.md) for API key instructions and advanced patterns.
+
+---
+
 ## Updating
 
 KubeShark is a plain Git repository. Pull the latest changes to update:
@@ -97,6 +139,12 @@ cd "$env:USERPROFILE\.claude\skills\kubernetes-skill"; git pull
 
 ```bash
 cd .kubernetes-skill && git pull
+```
+
+**Antigravity IDE plugin:**
+
+```bash
+cd ~/.gemini/config/plugins/kubeshark && git pull
 ```
 
 ---
@@ -125,6 +173,12 @@ rm -rf .kubernetes-skill
 
 Also remove the corresponding section from `AGENTS.md` if you added one.
 
+**Antigravity IDE plugin:**
+
+```bash
+rm -rf ~/.gemini/config/plugins/kubeshark
+```
+
 **Marketplace installs:**
 
 ```
@@ -150,3 +204,11 @@ Test-Path "$env:USERPROFILE\.claude\skills\kubernetes-skill\SKILL.md"
 ```
 
 If the file exists, KubeShark is ready. You can also verify by asking Claude Code a Kubernetes question -- the response should follow the 7-step workflow and include an output contract with assumptions, failure modes, and rollback notes.
+
+**Antigravity IDE:**
+
+```bash
+ls ~/.gemini/config/plugins/kubeshark/SKILL.md
+```
+
+Or verify via the SDK by asking the agent to list its skills. See the [Antigravity Setup Guide](antigravity-setup.md) for verification details.
